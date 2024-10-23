@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Text.Encodings.Web;
 using System.Xml.Serialization;
 
 List<Plant> plants = new List<Plant>()
@@ -52,18 +53,21 @@ List<Plant> plants = new List<Plant>()
 
 
 
+
 string greeting = "Greetings! Welcome to the ExtraVert plant shop!";
 Console.WriteLine(greeting);
 
 string choice = null;
 
-while (choice != "e")
+while (choice != "f")
 {
-    Console.WriteLine(@"a. Display all plants
+    Console.WriteLine(@"
+a. Display all plants
 b. Post a plant to be adopted
 c. Adopt a plant
 d. Delist a plant
-e. Exit");
+e. Plant of the day!
+f. Exit");
     Console.WriteLine("Please select a lettered option");
 
     try
@@ -72,7 +76,7 @@ e. Exit");
     }
     catch
     {
-        if (choice != "a" && choice != "b" && choice != "c" && choice != "d") {
+        if (choice != "a" && choice != "b" && choice != "c" && choice != "d" && choice != "e") {
             throw new ArgumentOutOfRangeException("Invalid option. Please enter a lettered option from the menu");
         }
     }
@@ -94,6 +98,10 @@ e. Exit");
         delistPlant();
     }
     else if (choice == "e")
+    {
+        plantOfTheDay();
+    }
+    else if (choice == "f")
     {
         Console.WriteLine("Exiting the list!");
     }
@@ -195,7 +203,20 @@ void delistPlant()
     }
 }
 
-
+void plantOfTheDay()
+{
+    Random random = new Random();
+    int randomInteger = random.Next(0, plants.Count);
+    while (plants[randomInteger].Sold == true)
+    {
+        randomInteger = random.Next(0, plants.Count);
+    }
+    Console.WriteLine("Plant of the day!");
+    Console.WriteLine($"Species: {plants[randomInteger].Species}");
+    Console.WriteLine($"City: {plants[randomInteger].City}");
+    Console.WriteLine($"Light needs: {plants[randomInteger].LightNeeds}");
+    Console.WriteLine($"Asking price: {plants[randomInteger].AskingPrice} dollars");
+}
 
 
 

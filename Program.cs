@@ -51,6 +51,7 @@ List<Plant> plants = new List<Plant>()
 };
 
 
+
 string greeting = "Greetings! Welcome to the ExtraVert plant shop!";
 Console.WriteLine(greeting);
 
@@ -86,11 +87,11 @@ e. Exit");
     }
     else if (choice == "c")
     {
-        throw new NotImplementedException("Adopt a plant");
+        adoptPlant();
     }
     else if (choice == "d")
     {
-        throw new NotImplementedException("Delist a plant");
+        delistPlant();
     }
     else if (choice == "e")
     {
@@ -113,6 +114,8 @@ void displayPlants()
 
 void postPlant()
 {
+
+
     Console.WriteLine("To post a plant, please enter a value for each option below:");
     Console.WriteLine("Please enter your plant's species:");
     string userSpecies = Console.ReadLine();
@@ -128,17 +131,69 @@ void postPlant()
 
     Console.WriteLine("Please enter your zip:");
     int userZip = int.Parse(Console.ReadLine());
+
+    Plant userPlant = new Plant()
+    {
+        Species = userSpecies,
+        LightNeeds = userLightNeeds,
+        AskingPrice = userAskingPrice,
+        City = userCity,
+        ZIP = userZip,
+        Sold = false
+    };
+    plants.Add(userPlant);
+
     Console.WriteLine($@"
     User entered the following information:
-    {userSpecies}
-    {userLightNeeds}
-    {userAskingPrice}
-    {userCity}
-    {userZip}
+    {userPlant.Species}
+    {userPlant.LightNeeds}
+    {userPlant.AskingPrice}
+    {userPlant.City}
+    {userPlant.ZIP}
     ");
 }
 
+void adoptPlant()
+{
+    List<Plant> availablePlants = new List<Plant>();
 
+    Console.WriteLine("Available plants to adopt:");
+    for (int i = 0; i < plants.Count; i++)
+    {
+        if (!plants[i].Sold)
+        {
+            availablePlants.Add(plants[i]);
+        }
+    }
+
+    for (int i = 0; i < availablePlants.Count; i++)
+    {
+        Console.WriteLine($"{i + 1}. {availablePlants[i].Species}");
+    }
+    Console.WriteLine("Choose a plant to adopt");
+    int userChoice = int.Parse(Console.ReadLine());
+    if (userChoice > 0 || userChoice < availablePlants.Count)
+    {
+        int plantIndex = userChoice - 1;
+        Console.WriteLine($"You chose {availablePlants[plantIndex].Species}");
+        availablePlants[plantIndex].Sold = true;
+    }
+
+}
+
+void delistPlant()
+{
+    Console.WriteLine("Choose a plant to remove from the list:");
+    for (int i = 0; i < plants.Count; i++) 
+    {
+        Console.WriteLine($"{i + 1}. {plants[i].Species}");
+    }
+    int userChoice = int.Parse(Console.ReadLine());
+    if (userChoice > 0 || userChoice < plants.Count)
+    {
+        plants.RemoveAt(userChoice - 1);
+    }
+}
 
 
 

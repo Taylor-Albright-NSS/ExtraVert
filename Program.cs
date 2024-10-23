@@ -12,6 +12,7 @@ List<Plant> plants = new List<Plant>()
         City = "Knoxville",
         ZIP = 37076,
         Sold = false,
+        AvailableUntil = new DateTime(2024, 10, 30)
     },
     new Plant()
     {
@@ -21,6 +22,7 @@ List<Plant> plants = new List<Plant>()
         City = "Nashville",
         ZIP = 22353,
         Sold = false,
+        AvailableUntil = new DateTime(2024, 10, 23)
     },
     new Plant()
     {
@@ -30,6 +32,7 @@ List<Plant> plants = new List<Plant>()
         City = "Tampa",
         ZIP = 53575,
         Sold = false,
+        AvailableUntil = new DateTime(2024, 10, 23)
     },
     new Plant()
     {
@@ -39,6 +42,7 @@ List<Plant> plants = new List<Plant>()
         City = "Phoenix",
         ZIP = 12575,
         Sold = true,
+        AvailableUntil = new DateTime(2024, 10, 30)
     },
     new Plant()
     {
@@ -48,6 +52,7 @@ List<Plant> plants = new List<Plant>()
         City = "Frankfurt",
         ZIP = 475773,
         Sold = false,
+        AvailableUntil = new DateTime(2024, 10, 30)
     },
 };
 
@@ -145,6 +150,16 @@ void postPlant()
     Console.WriteLine("Please enter your zip:");
     int userZip = int.Parse(Console.ReadLine());
 
+    Console.WriteLine("Please enter the expiration year of your post (example: 2024):");
+    int availableUntilYear = int.Parse(Console.ReadLine());
+
+    Console.WriteLine("Please enter the expiration month of your post (example: 12):");
+    int availableUntilMonth = int.Parse(Console.ReadLine());
+
+    Console.WriteLine("Please enter the expiration day of your post (example: 31):");
+    int availableUntilDay = int.Parse(Console.ReadLine());
+
+
     Plant userPlant = new Plant()
     {
         Species = userSpecies,
@@ -152,6 +167,7 @@ void postPlant()
         AskingPrice = userAskingPrice,
         City = userCity,
         ZIP = userZip,
+        AvailableUntil = new DateTime(availableUntilYear, availableUntilMonth, availableUntilDay),
         Sold = false
     };
     plants.Add(userPlant);
@@ -163,6 +179,7 @@ void postPlant()
     {userPlant.AskingPrice}
     {userPlant.City}
     {userPlant.ZIP}
+    {userPlant.AvailableUntil}
     ");
 }
 
@@ -170,10 +187,13 @@ void adoptPlant()
 {
     List<Plant> availablePlants = new List<Plant>();
 
+    DateTime now = DateTime.Now;
+
     Console.WriteLine("Available plants to adopt:");
     for (int i = 0; i < plants.Count; i++)
     {
-        if (!plants[i].Sold)
+        TimeSpan availability = plants[i].AvailableUntil - now;
+        if (!plants[i].Sold && availability.Days > 0)
         {
             availablePlants.Add(plants[i]);
         }

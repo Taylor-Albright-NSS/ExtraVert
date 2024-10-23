@@ -59,7 +59,7 @@ Console.WriteLine(greeting);
 
 string choice = null;
 
-while (choice != "f")
+while (choice != "z")
 {
     Console.WriteLine(@"
 a. Display all plants
@@ -67,7 +67,8 @@ b. Post a plant to be adopted
 c. Adopt a plant
 d. Delist a plant
 e. Plant of the day!
-f. Exit");
+f. Search for plant
+z. Exit");
     Console.WriteLine("Please select a lettered option");
 
     try
@@ -76,7 +77,7 @@ f. Exit");
     }
     catch
     {
-        if (choice != "a" && choice != "b" && choice != "c" && choice != "d" && choice != "e") {
+        if (choice != "a" && choice != "b" && choice != "c" && choice != "d" && choice != "e" && choice != "f") {
             throw new ArgumentOutOfRangeException("Invalid option. Please enter a lettered option from the menu");
         }
     }
@@ -102,6 +103,10 @@ f. Exit");
         plantOfTheDay();
     }
     else if (choice == "f")
+    {
+        search();
+    }
+    else if (choice == "z")
     {
         Console.WriteLine("Exiting the list!");
     }
@@ -219,7 +224,42 @@ void plantOfTheDay()
 }
 
 
+void search()
+{
+    List<Plant> lightPlants = new List<Plant>();
+    List<Plant> lightPlants2 = new List<Plant>();
 
+    Console.WriteLine("Please enter a light needs value between 1 and 5");
+    int userChoice = int.Parse(Console.ReadLine());
+    while (userChoice < 1 || userChoice > 5) 
+    {
+        Console.WriteLine(@"Your reponse needs to be a number between 1 and 5
+        Please try again now.");
+        userChoice = int.Parse(Console.ReadLine());
+    }
+    //for loop
+    for (int i = 0; i < plants.Count; i++)
+    {
+        if (plants[i].LightNeeds <= userChoice)
+        {
+            lightPlants.Add(plants[i]);
+        }
+    }
+    //foreach 
+    foreach (Plant plant in plants)
+    {
+        if (plant.LightNeeds <= userChoice)
+        {
+            lightPlants2.Add(plant);
+        }
+    }
+    //displays plants that fit the search criteria
+    foreach (Plant plant in lightPlants)
+    {
+        Console.WriteLine($"{plant.Species}");
+    }
+
+}
 
 
 

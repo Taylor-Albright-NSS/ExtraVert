@@ -140,11 +140,24 @@ void postPlant()
 
 
     Console.WriteLine("To post a plant, please enter a value for each option below:");
+
     Console.WriteLine("Please enter your plant's species:");
     string userSpecies = Console.ReadLine();
 
-    Console.WriteLine("Please enter your plant's light needs:");
-    int userLightNeeds = int.Parse(Console.ReadLine().Trim());
+    Console.WriteLine("Please enter your plant's light needs on a scale from 1 - 5:");
+    int userLightNeeds = 0;
+    while (userLightNeeds < 1 || userLightNeeds > 5) 
+    {
+        try 
+        {
+            userLightNeeds = int.Parse(Console.ReadLine().Trim());
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(@$"Exception message: {ex.Message}
+Please enter your plant's light needs on a scale from 1 - 5 correctly this time.");
+        }
+    }
         
     Console.WriteLine("Please enter your plant's asking price:");
     double userAskingPrice = double.Parse(Console.ReadLine());
@@ -156,13 +169,59 @@ void postPlant()
     int userZip = int.Parse(Console.ReadLine());
 
     Console.WriteLine("Please enter the expiration year of your post (example: 2024):");
-    int availableUntilYear = int.Parse(Console.ReadLine());
+    int availableUntilYear = 0;
+    while (availableUntilYear < 2024) 
+    {
+        try 
+        {
+            availableUntilYear = int.Parse(Console.ReadLine().Trim());
+            
+            if (availableUntilYear < 2024)
+            {
+                Console.WriteLine("Year must be 2024 or later. Please try again.");
+            }
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Invalid input! Please enter a valid year.");
+        }
+    }
 
     Console.WriteLine("Please enter the expiration month of your post (example: 12):");
-    int availableUntilMonth = int.Parse(Console.ReadLine());
+    int availableUntilMonth = 0;
+    while (availableUntilMonth < 1 || availableUntilMonth > 12)
+    {
+        try 
+        {
+            availableUntilMonth = int.Parse(Console.ReadLine());
+            if (availableUntilMonth < 1 || availableUntilMonth > 12)
+                {
+                    Console.WriteLine("Month must be a number between 1 and 12");
+                }
+        }
+        catch (Exception ex)
+        {
+            Console.Write($"{ex.Message}");
+        }
+    }
 
     Console.WriteLine("Please enter the expiration day of your post (example: 31):");
-    int availableUntilDay = int.Parse(Console.ReadLine());
+    int availableUntilDay = 0;
+    while (availableUntilDay < 1 || availableUntilDay > 30)
+    {
+        try 
+        {
+            availableUntilDay = int.Parse(Console.ReadLine());
+            if (availableUntilDay < 1 || availableUntilDay > 30)
+                {
+                    Console.WriteLine("Month must be a number between 1 and 31");  
+                }
+        }
+        catch (Exception ex)
+        {
+            Console.Write($"{ex.Message}");
+        }
+    }
 
 
     Plant userPlant = new Plant()
@@ -257,10 +316,14 @@ void search()
     Console.WriteLine("Please enter a light needs value between 1 and 5");
     int userChoice = int.Parse(Console.ReadLine());
     while (userChoice < 1 || userChoice > 5) 
-    {
+
+    try {
         Console.WriteLine(@"Your reponse needs to be a number between 1 and 5
-        Please try again now.");
+Please try again now.");
         userChoice = int.Parse(Console.ReadLine());
+    }
+    catch (Exception ex) {
+        Console.WriteLine($"This is your exception: {ex.Message}");
     }
     //for loop
     for (int i = 0; i < plants.Count; i++)
@@ -296,15 +359,15 @@ void showStatistics()
     int numberOfAdoptedPlants = 0;
 
     Console.WriteLine("Plant stats");
-
     foreach (Plant plant in plants)
     {
         if (plant.AskingPrice < cheapestPlant.AskingPrice ) {
             cheapestPlant = plant;
         }
     }
-
     Console.WriteLine($"Cheapest plant: {cheapestPlant.Species}");
+
+
     foreach (Plant plant in plants)
     {
         TimeSpan availability = plant.AvailableUntil - now;
@@ -315,6 +378,7 @@ void showStatistics()
     }
     Console.WriteLine($"Number of plants available: {availablePlants}");
 
+
     foreach (Plant plant in plants)
     {
         if (plant.LightNeeds > neediestPlant.LightNeeds)
@@ -324,14 +388,14 @@ void showStatistics()
     }
     Console.WriteLine($"Plant with most light needs: {neediestPlant.Species}");
 
+
     foreach (Plant plant in plants)
     {
         totalLightNeeds += plant.LightNeeds;
     }
-        double totalLightNeedsDouble = (double)totalLightNeeds;
-        double averageLightNeeds = totalLightNeedsDouble / plants.Count;
-
-        Console.WriteLine($"Average light needs: {averageLightNeeds}");
+    double totalLightNeedsDouble = (double)totalLightNeeds;
+    double averageLightNeeds = totalLightNeedsDouble / plants.Count;
+    Console.WriteLine($"Average light needs: {averageLightNeeds}");
 
     foreach (Plant plant in plants)
     {
@@ -340,9 +404,9 @@ void showStatistics()
             numberOfAdoptedPlants++;
         }
     }
-        double adoptedPlantsDouble = (double)numberOfAdoptedPlants;
-        double percentageOfAdoptedPlants = (adoptedPlantsDouble / plants.Count) * 100;
-        Console.WriteLine($"Percentage of plants that have been adopted: {percentageOfAdoptedPlants}%");
+    double adoptedPlantsDouble = (double)numberOfAdoptedPlants;
+    double percentageOfAdoptedPlants = (adoptedPlantsDouble / plants.Count) * 100;
+    Console.WriteLine($"Percentage of plants that have been adopted: {percentageOfAdoptedPlants}%");
 }
 
 

@@ -73,6 +73,7 @@ c. Adopt a plant
 d. Delist a plant
 e. Plant of the day!
 f. Search for plant
+g. View Statistics
 z. Exit");
     Console.WriteLine("Please select a lettered option");
 
@@ -82,7 +83,7 @@ z. Exit");
     }
     catch
     {
-        if (choice != "a" && choice != "b" && choice != "c" && choice != "d" && choice != "e" && choice != "f") {
+        if (choice != "a" && choice != "b" && choice != "c" && choice != "d" && choice != "e" && choice != "f" && choice != "g") {
             throw new ArgumentOutOfRangeException("Invalid option. Please enter a lettered option from the menu");
         }
     }
@@ -110,6 +111,10 @@ z. Exit");
     else if (choice == "f")
     {
         search();
+    }
+    else if (choice == "g")
+    {
+        showStatistics();
     }
     else if (choice == "z")
     {
@@ -281,6 +286,64 @@ void search()
 
 }
 
+void showStatistics()
+{
+    DateTime now = DateTime.Now;
+    Plant cheapestPlant = plants[0];
+    Plant neediestPlant = plants[0];
+    int availablePlants = 0;
+    int totalLightNeeds = 0;
+    int numberOfAdoptedPlants = 0;
+
+    Console.WriteLine("Plant stats");
+
+    foreach (Plant plant in plants)
+    {
+        if (plant.AskingPrice < cheapestPlant.AskingPrice ) {
+            cheapestPlant = plant;
+        }
+    }
+
+    Console.WriteLine($"Cheapest plant: {cheapestPlant.Species}");
+    foreach (Plant plant in plants)
+    {
+        TimeSpan availability = plant.AvailableUntil - now;
+        if (availability.Days > 0 && !plant.Sold)
+        {
+           availablePlants++;
+        }
+    }
+    Console.WriteLine($"Number of plants available: {availablePlants}");
+
+    foreach (Plant plant in plants)
+    {
+        if (plant.LightNeeds > neediestPlant.LightNeeds)
+        {
+            neediestPlant = plant;
+        }
+    }
+    Console.WriteLine($"Plant with most light needs: {neediestPlant.Species}");
+
+    foreach (Plant plant in plants)
+    {
+        totalLightNeeds += plant.LightNeeds;
+    }
+        double totalLightNeedsDouble = (double)totalLightNeeds;
+        double averageLightNeeds = totalLightNeedsDouble / plants.Count;
+
+        Console.WriteLine($"Average light needs: {averageLightNeeds}");
+
+    foreach (Plant plant in plants)
+    {
+        if (plant.Sold)
+        {
+            numberOfAdoptedPlants++;
+        }
+    }
+        double adoptedPlantsDouble = (double)numberOfAdoptedPlants;
+        double percentageOfAdoptedPlants = (adoptedPlantsDouble / plants.Count) * 100;
+        Console.WriteLine($"Percentage of plants that have been adopted: {percentageOfAdoptedPlants}%");
+}
 
 
 
@@ -292,6 +355,4 @@ void search()
 
 
 
-
-
-
+;

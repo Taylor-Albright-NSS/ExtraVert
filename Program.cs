@@ -130,7 +130,7 @@ void displayPlants()
 {
     for (int i = 0; i < plants.Count; i++)
     {
-        Console.WriteLine($"{i + 1}. {plants[i].Species} in {plants[i].City} {(plants[i].Sold ? "was sold" : "is available")} for {plants[i].AskingPrice} dollars.");
+        Console.WriteLine($"{i + 1}. {PlantDetails(plants[i])} in {plants[i].City} {(plants[i].Sold ? "was sold" : "is available")} for {plants[i].AskingPrice} dollars.");
     }
 
 }
@@ -238,7 +238,7 @@ Please enter your plant's light needs on a scale from 1 - 5 correctly this time.
 
     Console.WriteLine($@"
     User entered the following information:
-    {userPlant.Species}
+    {PlantDetails(userPlant)}
     {userPlant.LightNeeds}
     {userPlant.AskingPrice}
     {userPlant.City}
@@ -265,14 +265,14 @@ void adoptPlant()
 
     for (int i = 0; i < availablePlants.Count; i++)
     {
-        Console.WriteLine($"{i + 1}. {availablePlants[i].Species}");
+        Console.WriteLine($"{i + 1}. {PlantDetails(availablePlants[i])}");
     }
     Console.WriteLine("Choose a plant to adopt");
     int userChoice = int.Parse(Console.ReadLine());
     if (userChoice > 0 || userChoice < availablePlants.Count)
     {
         int plantIndex = userChoice - 1;
-        Console.WriteLine($"You chose {availablePlants[plantIndex].Species}");
+        Console.WriteLine($"You chose {PlantDetails(availablePlants[plantIndex])}");
         availablePlants[plantIndex].Sold = true;
     }
 
@@ -283,7 +283,7 @@ void delistPlant()
     Console.WriteLine("Choose a plant to remove from the list:");
     for (int i = 0; i < plants.Count; i++) 
     {
-        Console.WriteLine($"{i + 1}. {plants[i].Species}");
+        Console.WriteLine($"{i + 1}. {PlantDetails(plants[i])}");
     }
     int userChoice = int.Parse(Console.ReadLine());
     if (userChoice > 0 || userChoice < plants.Count)
@@ -301,7 +301,7 @@ void plantOfTheDay()
         randomInteger = random.Next(0, plants.Count);
     }
     Console.WriteLine("Plant of the day!");
-    Console.WriteLine($"Species: {plants[randomInteger].Species}");
+    Console.WriteLine($"Species: {PlantDetails(plants[randomInteger])}");
     Console.WriteLine($"City: {plants[randomInteger].City}");
     Console.WriteLine($"Light needs: {plants[randomInteger].LightNeeds}");
     Console.WriteLine($"Asking price: {plants[randomInteger].AskingPrice} dollars");
@@ -344,7 +344,7 @@ Please try again now.");
     //displays plants that fit the search criteria
     foreach (Plant plant in lightPlants)
     {
-        Console.WriteLine($"{plant.Species}");
+        Console.WriteLine($"{PlantDetails(plant)}");
     }
 
 }
@@ -365,7 +365,7 @@ void showStatistics()
             cheapestPlant = plant;
         }
     }
-    Console.WriteLine($"Cheapest plant: {cheapestPlant.Species}");
+    Console.WriteLine($"Cheapest plant: {PlantDetails(cheapestPlant)}");
 
 
     foreach (Plant plant in plants)
@@ -386,7 +386,7 @@ void showStatistics()
             neediestPlant = plant;
         }
     }
-    Console.WriteLine($"Plant with most light needs: {neediestPlant.Species}");
+    Console.WriteLine($"Plant with most light needs: {PlantDetails(neediestPlant)}");
 
 
     foreach (Plant plant in plants)
@@ -409,14 +409,10 @@ void showStatistics()
     Console.WriteLine($"Percentage of plants that have been adopted: {percentageOfAdoptedPlants}%");
 }
 
+string PlantDetails(Plant plant)
+{
+    string plantString = plant.Species;
 
+    return plantString;
+}
 
-
-
-
-
-
-
-
-
-;

@@ -6,5 +6,6 @@ public class Plant()
     public string City { get; set; }
     public int ZIP { get; set; }
     public bool Sold { get; set; }
+    public string PlantType { get; set; }
     public DateTime AvailableUntil { get; set; }
 }

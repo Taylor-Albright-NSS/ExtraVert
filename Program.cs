@@ -2,10 +2,13 @@
 using System.Text.Encodings.Web;
 using System.Xml.Serialization;
 
+Dictionary<string, int> inventory = new Dictionary<string, int>();
+
 List<Plant> plants = new List<Plant>()
 {
     new Plant()
     {
+        PlantType = "tree",
         Species = "Tree",
         LightNeeds = 5,
         AskingPrice = 45.50,
@@ -16,6 +19,7 @@ List<Plant> plants = new List<Plant>()
     },
     new Plant()
     {
+        PlantType = "herb",
         Species = "Bush",
         LightNeeds = 4,
         AskingPrice = 23.50,
@@ -26,6 +30,7 @@ List<Plant> plants = new List<Plant>()
     },
     new Plant()
     {
+        PlantType = "bush",
         Species = "Grass",
         LightNeeds = 3,
         AskingPrice = 10.00,
@@ -36,6 +41,7 @@ List<Plant> plants = new List<Plant>()
     },
     new Plant()
     {
+        PlantType = "flower",
         Species = "Venus Fly Trap",
         LightNeeds = 2,
         AskingPrice = 35.50,
@@ -46,6 +52,7 @@ List<Plant> plants = new List<Plant>()
     },
     new Plant()
     {
+        PlantType = "flower",
         Species = "Fern",
         LightNeeds = 2,
         AskingPrice = 5.00,
@@ -73,7 +80,8 @@ c. Adopt a plant
 d. Delist a plant
 e. Plant of the day!
 f. Search for plant
-g. View Statistics
+g. View statistics
+h. Get inventory by species
 z. Exit");
     Console.WriteLine("Please select a lettered option");
 
@@ -83,7 +91,8 @@ z. Exit");
     }
     catch
     {
-        if (choice != "a" && choice != "b" && choice != "c" && choice != "d" && choice != "e" && choice != "f" && choice != "g") {
+        if (choice != "a" && choice != "b" && choice != "c" && choice != "d" && choice != "e" && choice != "f" && choice != "g" && choice != "h") 
+        {
             throw new ArgumentOutOfRangeException("Invalid option. Please enter a lettered option from the menu");
         }
     }
@@ -116,6 +125,10 @@ z. Exit");
     {
         showStatistics();
     }
+    else if (choice == "h")
+    {
+        InventoryBySpecies(inventory);
+    }
     else if (choice == "z")
     {
         Console.WriteLine("Exiting the list!");
@@ -137,9 +150,24 @@ void displayPlants()
 
 void postPlant()
 {
-
+    string[] plantTypes =
+    {  
+        "tree",
+        "bush",
+        "flower",
+        "herb"
+    };
 
     Console.WriteLine("To post a plant, please enter a value for each option below:");
+
+    Console.WriteLine("Please enter a plant type for your plant:");
+    int listCount = 1;
+    foreach (string type in plantTypes)
+    {
+        Console.WriteLine($"{listCount}. {type}");
+        listCount++;
+    }
+    string userPlantType = Console.ReadLine();
 
     Console.WriteLine("Please enter your plant's species:");
     string userSpecies = Console.ReadLine();
@@ -226,6 +254,7 @@ Please enter your plant's light needs on a scale from 1 - 5 correctly this time.
 
     Plant userPlant = new Plant()
     {
+        PlantType = userPlantType,
         Species = userSpecies,
         LightNeeds = userLightNeeds,
         AskingPrice = userAskingPrice,
@@ -239,6 +268,8 @@ Please enter your plant's light needs on a scale from 1 - 5 correctly this time.
     Console.WriteLine($@"
     User entered the following information:
     {PlantDetails(userPlant)}
+    {userPlant.PlantType}
+    {userPlant.Species}
     {userPlant.LightNeeds}
     {userPlant.AskingPrice}
     {userPlant.City}
@@ -416,3 +447,35 @@ string PlantDetails(Plant plant)
     return plantString;
 }
 
+
+
+void InventoryBySpecies(Dictionary<string, int> inv)
+{
+    foreach (Plant plant in plants)
+    {
+        if (inv.TryGetValue(plant.Species, out int count))
+        {
+            inv[plant.Species] = count + 1;
+        }
+        else
+        {
+            inv[plant.Species] = 1;
+        }
+    }
+    Console.WriteLine($"");
+    Console.WriteLine($"Inventory Report");
+    foreach (KeyValuePair<string, int> item in inventory)
+    {
+        Console.WriteLine($"{item.Key}: {item.Value}");
+    }
+}
+
+string[] saladToppings = new string[4];
+saladToppings[0] = "First";
+saladToppings[1] = "Second";
+saladToppings[2] = "Third";
+
+foreach (string topping in saladToppings)
+{
+    Console.WriteLine($"{topping}");
+}

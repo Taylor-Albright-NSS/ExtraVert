@@ -68,74 +68,47 @@ List<Plant> plants = new List<Plant>()
 
 string greeting = "Greetings! Welcome to the ExtraVert plant shop!";
 Console.WriteLine(greeting);
+DisplayMainOptions();
 
 string choice = null;
-
 while (choice != "z")
 {
-    Console.WriteLine(@"
-a. Display all plants
-b. Post a plant to be adopted
-c. Adopt a plant
-d. Delist a plant
-e. Plant of the day!
-f. Search for plant
-g. View statistics
-h. Get inventory by species
-z. Exit");
-    Console.WriteLine("Please select a lettered option");
-
-    try
+    choice = Console.ReadLine().Trim().ToLower();
+    switch (choice)
     {
-        choice = Console.ReadLine().Trim().ToLower();
-    }
-    catch
-    {
-        if (choice != "a" && choice != "b" && choice != "c" && choice != "d" && choice != "e" && choice != "f" && choice != "g" && choice != "h") 
-        {
-            throw new ArgumentOutOfRangeException("Invalid option. Please enter a lettered option from the menu");
-        }
-    }
-
-    if (choice == "a")
-    {
+        case "a":
         displayPlants();
-    }
-    else if (choice == "b")
-    {
+        break;
+        case "b":
         postPlant();
-    }
-    else if (choice == "c")
-    {
+        break;
+        case "c":
         adoptPlant();
-    }
-    else if (choice == "d")
-    {
+        break;
+        case "d":
         delistPlant();
-    }
-    else if (choice == "e")
-    {
+        break;
+        case "e":
         plantOfTheDay();
-    }
-    else if (choice == "f")
-    {
+        break;
+        case "f":
         search();
-    }
-    else if (choice == "g")
-    {
+        break;
+        case "g":
         showStatistics();
-    }
-    else if (choice == "h")
-    {
+        break;
+        case "h":
         InventoryBySpecies(inventory);
-    }
-    else if (choice == "z")
-    {
+        break;
+        case "m":
+        DisplayMainOptions();
+        break;
+        case "z":
         Console.WriteLine("Exiting the list!");
-    }
-    else
-    {
-        Console.WriteLine("Invalid Option. Please select a valid option from the list.");
+        break;
+        default:
+        Console.WriteLine("Please enter a valid option");
+        break;
     }
 }
 
@@ -161,16 +134,65 @@ void postPlant()
     Console.WriteLine("To post a plant, please enter a value for each option below:");
 
     Console.WriteLine("Please enter a plant type for your plant:");
+
     int listCount = 1;
     foreach (string type in plantTypes)
     {
         Console.WriteLine($"{listCount}. {type}");
         listCount++;
     }
-    string userPlantType = Console.ReadLine();
+    int userChoice;
+    string userPlantType = null;
+    while (userPlantType == null)
+    {
+    try 
+    {
+        userChoice = int.Parse(Console.ReadLine());
+        if (userChoice <= 0 || userChoice >= 5)
+        {
+            throw new ArgumentOutOfRangeException();
+        } 
+        else 
+        {
+            userPlantType = plantTypes[userChoice];
+        }
+    }
+    catch (ArgumentOutOfRangeException ex)
+    {
+        Console.WriteLine($"PLEASE SELECT A VALUE WITHIN THE GIVEN RANGE");
+    }
+    catch (FormatException)
+    {
+        Console.WriteLine($"PLEASE ONLY USE INTEGERS");
+    }
+    }
+
+
+
 
     Console.WriteLine("Please enter your plant's species:");
-    string userSpecies = Console.ReadLine();
+    string userSpecies = null;
+    while(userSpecies == null)
+    {
+        try
+        {
+            userSpecies = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(userSpecies))
+            {
+                Console.WriteLine("PLEASE ENTER A VALUE");
+                throw new FormatException();
+            }
+            else if (int.TryParse(userSpecies, out _))
+            {
+                Console.WriteLine("You entered a number. Please enter a string name for your species, and do it right!");
+                throw new FormatException();
+            }
+        }
+        catch (FormatException)
+        {
+            userSpecies = null;
+        }
+    }
 
     Console.WriteLine("Please enter your plant's light needs on a scale from 1 - 5:");
     int userLightNeeds = 0;
@@ -179,16 +201,47 @@ void postPlant()
         try 
         {
             userLightNeeds = int.Parse(Console.ReadLine().Trim());
+            if (userLightNeeds < 1 || userLightNeeds > 5)
+            {
+                throw new FormatException();
+            }
         }
-        catch (Exception ex)
+        catch (FormatException)
         {
-            Console.WriteLine(@$"Exception message: {ex.Message}
-Please enter your plant's light needs on a scale from 1 - 5 correctly this time.");
+            Console.WriteLine("Please enter your plant's light needs on a scale from 1 - 5 correctly this time.");
         }
     }
-        
+       
     Console.WriteLine("Please enter your plant's asking price:");
-    double userAskingPrice = double.Parse(Console.ReadLine());
+    double userAskingPrice = 0;
+    string input;
+    while (userAskingPrice <= 0)
+    {
+        try 
+        {
+            input = Console.ReadLine();
+            if (double.TryParse(input, out userAskingPrice))
+            {
+                if (userAskingPrice <= 0)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+            }
+                else
+                {
+                    throw new FormatException();
+                }
+        }
+        catch(FormatException)
+        {
+            Console.WriteLine("Please enter a number value for the price! NO LETTERS");
+        }
+        catch(ArgumentOutOfRangeException)
+        {
+            Console.WriteLine("Please enter a number value greater than 0!");
+        }
+
+    }
 
     Console.WriteLine("Please enter your city:");
     string userCity = Console.ReadLine();
@@ -479,3 +532,19 @@ foreach (string topping in saladToppings)
 {
     Console.WriteLine($"{topping}");
 }
+
+void DisplayMainOptions()
+{
+     Console.WriteLine(@"
+a. Display all plants
+b. Post a plant to be adopted
+c. Adopt a plant
+d. Delist a plant
+e. Plant of the day!
+f. Search for plant
+g. View statistics
+h. Get inventory by species
+z. Exit");
+}
+
+public partial class Program { }
